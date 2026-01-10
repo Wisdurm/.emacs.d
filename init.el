@@ -46,6 +46,8 @@
 (defvaralias 'cperl-indent-level 'tab-width)
 ;; Whitespace clarity
 (setq x-stretch-cursor t)
+;; Line numbers
+(add-hook 'prog-mode-hook 'display-line-numbers-mode)
 ;; Make C-q more intuitive
 (defun prot/keyboard-quit-dwim ()
   "Do-What-I-Mean behaviour for a general `keyboard-quit'.
