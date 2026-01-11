@@ -48,6 +48,9 @@
 (setq x-stretch-cursor t)
 ;; Line numbers
 (add-hook 'prog-mode-hook 'display-line-numbers-mode)
+;; Transparent background
+(set-frame-parameter nil 'alpha-background 90)
+(add-to-list 'default-frame-alist '(alpha-background . 90))
 ;; Make C-q more intuitive
 (defun prot/keyboard-quit-dwim ()
   "Do-What-I-Mean behaviour for a general `keyboard-quit'.
