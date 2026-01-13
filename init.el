@@ -40,7 +40,10 @@
 (setq default-tab-width 4)
 (setq-default tab-width 4)
 (setq tab-width 4)
+;; Fill column
 (setq-default fill-column 80)
+;;; Unbind 'C-x f'
+(keymap-global-unset "C-x f")
 ;; Specific languages
 (defvaralias 'c-basic-offset 'tab-width)
 (defvaralias 'cperl-indent-level 'tab-width)
@@ -48,6 +51,9 @@
 (setq x-stretch-cursor t)
 ;; Line numbers
 (add-hook 'prog-mode-hook 'display-line-numbers-mode)
+;; Default text mode and autofill mode
+(setq-default major-mode 'text-mode)
+(add-hook 'text-mode-hook 'turn-on-auto-fill)
 ;; Transparent background
 (set-frame-parameter nil 'alpha-background 90)
 (add-to-list 'default-frame-alist '(alpha-background . 90))
