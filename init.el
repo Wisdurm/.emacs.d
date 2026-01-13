@@ -8,11 +8,11 @@
 ;; Copy line
 (defun copy-line()
   (interactive)
-  (move-beginning-of-line 1)
-  (kill-line)
-  (yank)
-  (move-beginning-of-line 1)
-)
+  (let ((opoint (point))) ; save-excursion not work :(
+	(move-beginning-of-line 1)
+	(kill-line)
+	(yank)
+	(goto-char opoint)))
 (global-set-key (kbd "C-M-y") 'copy-line)
 ;; Disable tool bar
 (tool-bar-mode -1)
@@ -184,3 +184,4 @@ The DWIM behaviour of this command is as follows:
     ("S-TAB" . dired-subtree-remove))
   :config
   (setq dired-subtree-use-backgrounds nil))
+(put 'narrow-to-region 'disabled nil)
