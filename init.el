@@ -57,6 +57,8 @@
 ;; Transparent background
 (set-frame-parameter nil 'alpha-background 90)
 (add-to-list 'default-frame-alist '(alpha-background . 90))
+;; GDB window apocalypse
+(setq gdb-many-windows t)
 ;; Make C-q more intuitive
 (defun prot/keyboard-quit-dwim ()
   "Do-What-I-Mean behaviour for a general `keyboard-quit'.
@@ -191,3 +193,13 @@ The DWIM behaviour of this command is as follows:
   :config
   (setq dired-subtree-use-backgrounds nil))
 (put 'narrow-to-region 'disabled nil)
+;; Magit??
+(use-package magit
+  :ensure t
+  )
+;; Quick window switching
+(use-package ace-window
+  :ensure t
+  )
+(global-set-key (kbd "C-x o") 'ace-window)
+(setq aw-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l))
