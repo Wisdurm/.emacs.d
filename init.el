@@ -234,3 +234,7 @@ The DWIM behaviour of this command is as follows:
    ("C-x C-a b" . activities-switch-buffer)
    ("C-x C-a g" . activities-revert)
    ("C-x C-a l" . activities-list)))
+;; Add lua
+(use-package lua-mode
+  :ensure t
+  )
