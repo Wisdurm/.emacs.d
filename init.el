@@ -210,6 +210,7 @@ The DWIM behaviour of this command is as follows:
   )
 ;; Multiple "workspaces" (like tab-bar-mode, but a bit different)
 (use-package perspective
+  :ensure t
   :bind
   ("C-x C-b" . persp-list-buffers)         ; or use a nicer switcher, see below
   :custom
@@ -218,6 +219,7 @@ The DWIM behaviour of this command is as follows:
   (persp-mode))
 ;; Save workspace (persp-mode.el looks rough )
 (use-package activities
+  :ensure t
   :init
   (activities-mode)
   (activities-tabs-mode)
