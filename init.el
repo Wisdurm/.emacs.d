@@ -5,6 +5,9 @@
 ;; ************************
 ;; EMACS STUFF
 ;; ************************
+
+;;; Functions
+
 ;; Copy line
 (defun copy-line()
   (interactive)
@@ -14,6 +17,45 @@
 	(yank)
 	(goto-char opoint)))
 (global-set-key (kbd "C-M-y") 'copy-line)
+
+;; Jump between matching symbols
+(defun hop-between(dir)
+  "Jumps between matching symbols under the cursor.
+For example, can between closing and opening parentheses,
+html tags, lua blocks and everything else I can be bothered
+to add"
+  (interactive "cDirection: ")
+  (if (eq ?f dir)
+	  (progn ;; Forward
+		(if (or (eq ?\( (char-after))
+				(eq ?\( (char-before))
+				(eq ?\{ (char-after))
+				(eq ?\{ (char-before))
+				(eq ?\[ (char-before))
+				(eq ?\[ (char-after)))
+			(forward-sexp) ;; Generic jump
+		  (if (eq major-mode 'mhtml-mode) ;; Html
+			  (sgml-skip-tag-forward 1)
+			(if (eq major-mode 'lua-mode) ;; Lua
+				(progn ;; Jump to before last symbol because that's good for lua
+				  (end-of-line)
+				  (backward-word)
+				  (lua-forward-sexp))
+			))))
+	(progn ;; Backward
+	  (if (or (eq ?\) (char-after))
+			  (eq ?\) (char-before))
+			  (eq ?\} (char-after))
+			  (eq ?\} (char-before))
+			  (eq ?\] (char-before))
+			  (eq ?\] (char-after)))
+		  (backward-sexp) ;; Generic jump
+		(if (eq major-mode 'mhtml-mode) ;; Html
+			(sgml-skip-tag-backward 1)
+		  (if (eq major-mode 'lua-mode) ;; Lua
+			  (lua-backward-up-list)
+		  ))))
+	))
 ;; Disable tool bar
 (tool-bar-mode -1)
 ;; UTF-8
