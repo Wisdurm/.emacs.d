@@ -19,7 +19,7 @@
 (global-set-key (kbd "C-M-y") 'copy-line)
 
 ;; Jump between matching symbols
-(defun hop-between(dir)
+(defun hop-between-pairs(dir)
   "Jumps between matching symbols under the cursor.
 For example, can between closing and opening parentheses,
 html tags, lua blocks and everything else I can be bothered
@@ -56,6 +56,9 @@ to add"
 			  (lua-backward-up-list)
 		  ))))
 	))
+; Bind
+(keymap-global-set "C-c h" 'hop-between-pairs)
+
 ;; Disable tool bar
 (tool-bar-mode -1)
 ;; UTF-8
@@ -82,16 +85,21 @@ to add"
 (setq default-tab-width 4)
 (setq-default tab-width 4)
 (setq tab-width 4)
+;; Mentally sane formatting
+(defun c-mode-fuckyou-emacs()
+  (c-set-style "bsd"))
+(add-hook 'c-mode-common-hook 'c-mode-fuckyou-emacs)
 ;; Fill column
 (setq-default fill-column 80)
 ;;; Unbind 'C-x f'
 (keymap-global-unset "C-x f")
-;; Specific languages
+;; Give specific languages the same width
 (defvaralias 'c-basic-offset 'tab-width)
 (defvaralias 'cperl-indent-level 'tab-width)
 ;; Autocomplete after tabulation
 (setq tab-always-indent 'complete)
 (add-to-list 'completion-styles 'initials t)
+(defvaralias 'sgml-basic-offset 'tab-width)
 ;; Whitespace clarity
 (setq x-stretch-cursor t)
 ;; Line numbers
@@ -285,3 +293,34 @@ The DWIM behaviour of this command is as follows:
 (use-package lua-mode
   :ensure t
   )
+;; Orderless
+(use-package orderless
+  :ensure t
+  :custom
+  (completion-styles '(orderless basic))
+  (completion-category-overrides '((file (styles partial-completion))))
+  (completion-pcm-leading-wildcard t)) ;; Emacs 31: partial-completion behaves like substring
+;; Lsp
+(use-package lsp-mode
+  :ensure t
+  :hook (prog-mode . lsp-deferred)
+  :custom
+  (lsp-auto-guess-root t))                ;; auto guess root
+(keymap-global-set "C-c r" 'lsp-rename)
+;; Trust emacs formatting for now
+(setq lsp-enable-indentation nil)
+(setq lsp-enable-on-type-formatting nil)
+;; Code completion
+(use-package company
+  :ensure t
+  :hook (prog-mode . company-mode)
+  :bind (:map company-mode-map
+			  ([remap completion-at-point] . company-complete))
+  :custom
+  (company-idle-delay 0)
+  (company-echo-delay 0)
+  (company-show-numbers t)
+  (company-require-match nil)
+  (company-tooltip-align-annotations t)
+  (company-backends '(company-capf))
+  (keymap-global-set "C-c TAB" 'company-complete))
