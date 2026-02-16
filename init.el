@@ -89,6 +89,9 @@ to add"
 ;; Specific languages
 (defvaralias 'c-basic-offset 'tab-width)
 (defvaralias 'cperl-indent-level 'tab-width)
+;; Autocomplete after tabulation
+(setq tab-always-indent 'complete)
+(add-to-list 'completion-styles 'initials t)
 ;; Whitespace clarity
 (setq x-stretch-cursor t)
 ;; Line numbers
