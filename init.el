@@ -58,7 +58,8 @@ to add"
 	))
 ; Bind
 (keymap-global-set "C-c h" 'hop-between-pairs)
-
+;; Tabs (on by default I think because of perspective? idk...)
+(keymap-global-set "C-c t" 'tab-switcher)
 ;; Disable tool bar
 (tool-bar-mode -1)
 ;; UTF-8
@@ -158,8 +159,17 @@ The DWIM behaviour of this command is as follows:
 (sensible-defaults/offer-to-create-parent-directories-on-save)
 ;; All keybindings are cool
 (sensible-defaults/use-all-keybindings)
-;; Dont clog directories with auto-save files
+;; Dont clog directories with back-up files
 (sensible-defaults/backup-to-temp-directory)
+(setq backup-by-copying t
+	  version-control t 
+	  delete-old-versions t
+	  delete-by-moving-to-trash nil
+	  kept-old-versions 2
+      kept-new-versions 6
+      auto-save-default t ;; auto-save every buffer that visits a file
+      auto-save-timeout 20 ;; number of seconds idle time before auto-save (default: 30)
+      auto-save-interval 300) ;; number of keystrokes between auto-saves (default: 300)
 ;; ************************
 ;; PACKAGES
 ;; ************************
@@ -255,6 +265,7 @@ The DWIM behaviour of this command is as follows:
   :ensure t
   )
 (global-set-key (kbd "C-x o") 'ace-window)
+(global-set-key (kbd "C-c o") 'ace-swap-window)
 (setq aw-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l))
 ;; Simple markdown preview, might change out later, but
 ;; this is already one of the most convenient
@@ -307,6 +318,12 @@ The DWIM behaviour of this command is as follows:
   :custom
   (lsp-auto-guess-root t))                ;; auto guess root
 (keymap-global-set "C-c r" 'lsp-rename)
+;; Not super pretty but very functional
+(setq-default flymake-show-diagnostics-at-end-of-line t)
+(setq flymake-show-diagnostics-at-end-of-line t)
+;; Logging because Emacs sucks ass 
+(setq lsp-log-io t)
+(setq lsp-print-io t)
 ;; Trust emacs formatting for now
 (setq lsp-enable-indentation nil)
 (setq lsp-enable-on-type-formatting nil)
@@ -322,5 +339,12 @@ The DWIM behaviour of this command is as follows:
   (company-show-numbers t)
   (company-require-match nil)
   (company-tooltip-align-annotations t)
-  (company-backends '(company-capf))
-  (keymap-global-set "C-c TAB" 'company-complete))
+  (company-backends '(company-capf)))
+(keymap-global-set "C-c TAB" 'company-complete)
+(put 'upcase-region 'disabled nil)
+;; Fast movement
+(use-package avy
+  :ensure t)
+;; Trying which one feels better
+(keymap-global-set "C-c j" 'avy-goto-word-1)
+(keymap-global-set "C-c m" 'avy-goto-char-2)
