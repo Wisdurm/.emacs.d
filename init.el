@@ -70,8 +70,9 @@ to add"
 (setq default-buffer-file-coding-system 'utf-8)
 ;; Show empty lines
 (setq-default indicate-empty-lines t)
-;; Scroll margin
-(setq scroll-margin 8)
+;; Scrolling
+(setq scroll-margin 8
+	  scroll-conservatively 101)
 ;; Undo limits
 ;; Limit of 64mb.
 (setq undo-limit 67108864)
@@ -348,3 +349,7 @@ The DWIM behaviour of this command is as follows:
 ;; Trying which one feels better
 (keymap-global-set "C-c j" 'avy-goto-word-1)
 (keymap-global-set "C-c m" 'avy-goto-char-2)
+;; Haskell
+(use-package haskell-mode
+  :ensure t)
+;; todo: hoogle-interface

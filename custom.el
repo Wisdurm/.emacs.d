@@ -4,13 +4,17 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(company-show-quick-access t nil nil "Customized with use-package company")
+ '(haskell-hoogle-command nil)
  '(package-selected-packages
-   '(ace-window activities dired-subtree gh-md lua-mode magit marginalia
-				nerd-icons-completion nerd-icons-corfu nerd-icons-dired
-				perspective standard-themes)))
+   '(ace-window activities cmake-mode dired-subtree gh-md haskell-mode lua-mode
+				magit marginalia nerd-icons-completion nerd-icons-corfu
+				nerd-icons-dired perspective standard-themes))
+ '(tab-bar-mode t)
+ '(tool-bar-mode nil))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- )
+ '(default ((t (:family "Hasklug Nerd Font" :foundry "ADBO" :slant normal :weight semi-bold :height 113 :width normal)))))
