@@ -172,6 +172,11 @@ The DWIM behaviour of this command is as follows:
       auto-save-timeout 20 ;; number of seconds idle time before auto-save (default: 30)
       auto-save-interval 300) ;; number of keystrokes between auto-saves (default: 300)
 ;; ************************
+;; CESP
+;; ************************
+(add-to-list 'load-path "~/.emacs.d/cesp/emacs")
+(require 'cesp)
+;; ************************
 ;; PACKAGES
 ;; ************************
 ;; Initialize package manager
