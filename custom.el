@@ -7,7 +7,7 @@
  '(company-show-quick-access t nil nil "Customized with use-package company")
  '(haskell-hoogle-command nil)
  '(package-selected-packages
-   '(ace-window activities cmake-mode company dired-subtree gh-md haskell-mode
+   '(ace-window activities cmake-mode company dired-subtree exwm gh-md haskell-mode
 				lsp-mode lua-mode magit marginalia nerd-icons-completion
 				nerd-icons-corfu nerd-icons-dired orderless perspective
 				standard-themes))

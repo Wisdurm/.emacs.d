@@ -62,6 +62,7 @@ to add"
 (keymap-global-set "C-c t" 'tab-switcher)
 ;; Disable tool bar
 (tool-bar-mode -1)
+(menu-bar-mode -1)
 ;; UTF-8
 (prefer-coding-system 'utf-8)
 (set-default-coding-systems 'utf-8)
@@ -272,6 +273,8 @@ The DWIM behaviour of this command is as follows:
   )
 (global-set-key (kbd "C-x o") 'ace-window)
 (global-set-key (kbd "C-c o") 'ace-swap-window)
+(setq aw-minibuffer-flag nil)
+(setq aw-scope 'frame)
 (setq aw-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l))
 ;; Simple markdown preview, might change out later, but
 ;; this is already one of the most convenient
@@ -358,3 +361,29 @@ The DWIM behaviour of this command is as follows:
 (use-package haskell-mode
   :ensure t)
 ;; todo: hoogle-interface
+;; Window manager :eyes:
+(use-package exwm
+  :ensure t)
+(setq exwm-workspace-number 4)
+;; Make class name the buffer name.
+(add-hook 'exwm-update-class-hook
+  (lambda () (exwm-workspace-rename-buffer exwm-class-name)))
+;; Global keybindings.
+(setq exwm-input-global-keys
+      `(([?\s-r] . exwm-reset) ;; s-r: Reset (to line-mode).
+        ([?\s-w] . exwm-workspace-switch) ;; s-w: Switch workspace.
+		([?\s-o] . other-window) ;; s-w: Switch window (without ace).
+        ([?\s-&] . (lambda (cmd) ;; s-&: Launch application.
+                     (interactive (list (read-shell-command "$ ")))
+                     (start-process-shell-command cmd nil cmd)))
+        ;; s-N: Switch to certain workspace.
+        ,@(mapcar (lambda (i)
+                    `(,(kbd (format "s-%d" i)) .
+                      (lambda ()
+                        (interactive)
+                        (exwm-workspace-switch-create ,i))))
+                  (number-sequence 0 9))))
+;; Enable EXWM
+(exwm-wm-mode)
+(display-battery-mode)
+(display-time)
