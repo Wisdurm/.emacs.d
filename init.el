@@ -62,7 +62,6 @@ to add"
 (keymap-global-set "C-c t" 'tab-switcher)
 ;; Disable tool bar
 (tool-bar-mode -1)
-(menu-bar-mode -1)
 ;; UTF-8
 (prefer-coding-system 'utf-8)
 (set-default-coding-systems 'utf-8)
@@ -385,5 +384,7 @@ The DWIM behaviour of this command is as follows:
                   (number-sequence 0 9))))
 ;; Enable EXWM
 (exwm-wm-mode)
-(display-battery-mode)
-(display-time)
+(add-hook 'exwm-wm-mode-hook (lambda()
+							   (display-battery-mode)
+							   (display-time)
+							   (menu-bar-mode -1)))
