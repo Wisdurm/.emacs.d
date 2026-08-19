@@ -298,7 +298,7 @@ The DWIM behaviour of this command is as follows:
 (keymap-global-set "C-c TAB" 'company-complete)
 (global-company-mode)
 ;; Reasonable completion sorting
-(use-package 'company-statistics
+(use-package company-statistics
   :ensure t)
 (company-statistics-mode)
 ;; Snippets
