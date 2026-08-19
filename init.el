@@ -61,6 +61,7 @@ to add"
 ;; Tabs (on by default I think because of perspective? idk...)
 (keymap-global-set "C-c t" 'tab-switcher)
 ;; Disable tool bar
+(menu-bar-mode 1)
 (tool-bar-mode -1)
 ;; UTF-8
 (prefer-coding-system 'utf-8)
@@ -276,22 +277,11 @@ The DWIM behaviour of this command is as follows:
   (completion-styles '(orderless basic))
   (completion-category-overrides '((file (styles partial-completion))))
   (completion-pcm-leading-wildcard t)) ;; Emacs 31: partial-completion behaves like substring
-;; Lsp
-(use-package lsp-mode
+;; Eglot
+(use-package eglot
   :ensure t
-  :hook (prog-mode . lsp-deferred)
   :custom
-  (lsp-auto-guess-root t))                ;; auto guess root
-(keymap-global-set "C-c r" 'lsp-rename)
-;; Not super pretty but very functional
-(setq-default flymake-show-diagnostics-at-end-of-line t)
-(setq flymake-show-diagnostics-at-end-of-line t)
-;; Logging because Emacs sucks ass 
-(setq lsp-log-io t)
-(setq lsp-print-io t)
-;; Trust emacs formatting for now
-(setq lsp-enable-indentation nil)
-(setq lsp-enable-on-type-formatting nil)
+  (eglot-ignored-server-capabilities '(:documentOnTypeFormattingProvider)))
 ;; Code completion
 (use-package company
   :ensure t
@@ -304,9 +294,28 @@ The DWIM behaviour of this command is as follows:
   (company-show-numbers t)
   (company-require-match nil)
   (company-tooltip-align-annotations t)
-  (company-backends '(company-capf)))
+  (company-backends '(company-files company-yasnippet company-capf)))
 (keymap-global-set "C-c TAB" 'company-complete)
-; ???
+(global-company-mode)
+;; Reasonable completion sorting
+(use-package 'company-statistics
+  :ensure t)
+(company-statistics-mode)
+;; Snippets
+(use-package yasnippet
+  :ensure t)
+(use-package yasnippet-snippets
+  :ensure t)
+(yas-global-mode 1)
+;; Hooray
+(defvar company-mode/enable-yas t "Enable yasnippet for all backends.")
+(defun company-mode/backend-with-yas (backend)
+  (if (or (not company-mode/enable-yas) (and (listp backend)    (member 'company-yasnippet backend)))
+	  backend
+	(append (if (consp backend) backend (list backend))
+			'(:with company-yasnippet))))
+(setq company-backends (mapcar #'company-mode/backend-with-yas company-backends))
+;; ???
 (put 'upcase-region 'disabled nil)
 ;; Fast movement
 (use-package avy
@@ -340,15 +349,8 @@ The DWIM behaviour of this command is as follows:
                         (exwm-workspace-switch-create ,i))))
                   (number-sequence 0 9))))
 ;; Enable EXWM
-(exwm-wm-mode)
+;;(exwm-wm-mode) rather run in .xinitrc
 (add-hook 'exwm-wm-mode-hook (lambda()
 							   (display-battery-mode)
 							   (display-time)
 							   (menu-bar-mode -1)))
-;; HolyC
-; cries if ran at startup so commenting for now
-;; (add-to-list 'lsp-language-id-configuration '(".*\\.HC$" . "holyc"))
-;; (lsp-register-client (make-lsp-client
-;;                       :new-connection (lsp-stdio-connection "hcclsp") ;; hcclsp calls hcc -lsp
-;;                       :activation-fn (lsp-activate-on "holyc")
-;;                       :server-id 'holyc))

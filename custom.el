@@ -7,9 +7,11 @@
  '(company-show-quick-access t nil nil "Customized with use-package company")
  '(haskell-hoogle-command nil)
  '(package-selected-packages
-   '(ace-window cmake-mode company dired-subtree gh-md exwm haskell-mode lsp-mode
-				lua-mode magit marginalia nerd-icons-completion nerd-icons-corfu
-				nerd-icons-dired orderless standard-themes))
+   '(ace-window cmake-mode company company-statistics dired-subtree
+				eglot-inactive-regions exwm gh-md haskell-mode lua-mode magit
+				marginalia nerd-icons-completion nerd-icons-corfu
+				nerd-icons-dired orderless standard-themes yasnippet
+				yasnippet-snippets))
  '(tab-bar-mode t)
  '(tool-bar-mode nil))
 (custom-set-faces
