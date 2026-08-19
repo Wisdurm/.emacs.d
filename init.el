@@ -105,10 +105,10 @@ to add"
 ;; Whitespace clarity
 (setq x-stretch-cursor t)
 ;; Line numbers
-(add-hook 'prog-mode-hook 'display-line-numbers-mode)
+(add-hook 'prog-mode-hook #'display-line-numbers-mode)
 ;; Default text mode and autofill mode
 (setq-default major-mode 'text-mode)
-(add-hook 'text-mode-hook 'turn-on-auto-fill)
+(add-hook 'text-mode-hook #'turn-on-auto-fill)
 ;; Transparent background
 (set-frame-parameter nil 'alpha-background 90)
 (add-to-list 'default-frame-alist '(alpha-background . 90))
@@ -138,11 +138,12 @@ The DWIM behaviour of this command is as follows:
     (abort-recursive-edit))
    (t
     (keyboard-quit))))
-
 (define-key global-map (kbd "C-g") #'prot/keyboard-quit-dwim)
+
 ;; ************************
 ;; SENSIBLE DEFAULTS
 ;; ************************
+
 ;; Sensible defaults
 (add-to-list 'load-path "~/.emacs.d/sensible-defaults")
 (require 'sensible-defaults)
@@ -174,15 +175,17 @@ The DWIM behaviour of this command is as follows:
 ;; ************************
 ;; CESP
 ;; ************************
+
 (add-to-list 'load-path "~/.emacs.d/cesp/emacs")
 (require 'cesp)
+
 ;; ************************
 ;; PACKAGES
 ;; ************************
+
 ;; Initialize package manager
 (require 'package)
 (package-initialize)
-
 (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/"))
 ;; Incase emacs -v < 29 (unlikely, since even Debian 13 has v30)
 (when (< emacs-major-version 29)
@@ -190,13 +193,10 @@ The DWIM behaviour of this command is as follows:
     (unless package-archive-contents
       (package-refresh-contents))
     (package-install 'use-package)))
-;; Packages
-
 ;; Delete selected text when writing
 (use-package delsel
   :ensure nil ; no need to install it as it is built-in
   :hook (after-init . delete-selection-mode))
-
 ;; Theme (Standard dark tinted)
 ;; Not really sure what's going on here
 (use-package standard-themes
@@ -211,44 +211,33 @@ The DWIM behaviour of this command is as follows:
   ;; - Evaluate `(info "(standard-themes) Working with other Modus themes or taking over Modus")'
   ;; - Visit <https://protesilaos.com/emacs/standard-themes#h:d8ebe175-cd61-4e0b-9b84-7a4f5c7e09cd>
   (standard-themes-take-over-modus-themes-mode 1)
-  :bind ;; These are kind of fun :D
-  (("<f5>" . modus-themes-rotate)
-   ("C-<f5>" . modus-themes-select)
-   ("M-<f5>" . modus-themes-load-random))
   :config
   ;; All customisations here.
   (setq modus-themes-mixed-fonts t)
   (setq modus-themes-italic-constructs nil)
-
   ;; Finally, load your theme of choice
   (modus-themes-load-theme 'standard-dark-tinted))
-
 ;; Nerd font
 (use-package nerd-icons
   :ensure t)
-
 (use-package nerd-icons-completion
   :ensure t
   :after marginalia
   :config
   (add-hook 'marginalia-mode-hook #'nerd-icons-completion-marginalia-setup))
-
 (use-package nerd-icons-corfu
   :ensure t
   :after corfu
   :config
   (add-to-list 'corfu-margin-formatters #'nerd-icons-corfu-formatter))
-
 (use-package nerd-icons-dired
   :ensure t
   :hook
   (dired-mode . nerd-icons-dired-mode))
-
 ;; Command descriptions
 (use-package marginalia
   :ensure t
   :hook (after-init . marginalia-mode))
-
 ;; Preview subdirs in dired
 (use-package dired-subtree
   :ensure t
@@ -264,12 +253,10 @@ The DWIM behaviour of this command is as follows:
 (put 'narrow-to-region 'disabled nil)
 ;; Magit??
 (use-package magit
-  :ensure t
-  )
+  :ensure t)
 ;; Quick window switching
 (use-package ace-window
-  :ensure t
-  )
+  :ensure t)
 (global-set-key (kbd "C-x o") 'ace-window)
 (global-set-key (kbd "C-c o") 'ace-swap-window)
 (setq aw-minibuffer-flag nil)
@@ -278,40 +265,10 @@ The DWIM behaviour of this command is as follows:
 ;; Simple markdown preview, might change out later, but
 ;; this is already one of the most convenient
 (use-package gh-md
-  :ensure t
-  )
-;; Multiple "workspaces" (like tab-bar-mode, but a bit different)
-(use-package perspective
-  :ensure t
-  :bind
-  ("C-x C-b" . persp-list-buffers)         ; or use a nicer switcher, see below
-  :custom
-  (persp-mode-prefix-key (kbd "C-c M-p"))  ; pick your own prefix key here
-  :init
-  (persp-mode))
-;; Save workspace (persp-mode.el looks rough )
-(use-package activities
-  :ensure t
-  :init
-  (activities-mode)
-  (activities-tabs-mode)
-  ;; Prevent `edebug' default bindings from interfering.
-  (setq edebug-inhibit-emacs-lisp-mode-bindings t)
-
-  :bind
-  (("C-x C-a C-n" . activities-new)
-   ("C-x C-a C-d" . activities-define)
-   ("C-x C-a C-a" . activities-resume)
-   ("C-x C-a C-s" . activities-suspend)
-   ("C-x C-a C-k" . activities-kill)
-   ("C-x C-a RET" . activities-switch)
-   ("C-x C-a b" . activities-switch-buffer)
-   ("C-x C-a g" . activities-revert)
-   ("C-x C-a l" . activities-list)))
+  :ensure t)
 ;; Add lua
 (use-package lua-mode
-  :ensure t
-  )
+  :ensure t)
 ;; Orderless
 (use-package orderless
   :ensure t
@@ -349,6 +306,7 @@ The DWIM behaviour of this command is as follows:
   (company-tooltip-align-annotations t)
   (company-backends '(company-capf)))
 (keymap-global-set "C-c TAB" 'company-complete)
+; ???
 (put 'upcase-region 'disabled nil)
 ;; Fast movement
 (use-package avy
@@ -359,7 +317,6 @@ The DWIM behaviour of this command is as follows:
 ;; Haskell
 (use-package haskell-mode
   :ensure t)
-;; todo: hoogle-interface
 ;; Window manager :eyes:
 (use-package exwm
   :ensure t)
@@ -388,3 +345,10 @@ The DWIM behaviour of this command is as follows:
 							   (display-battery-mode)
 							   (display-time)
 							   (menu-bar-mode -1)))
+;; HolyC
+; cries if ran at startup so commenting for now
+;; (add-to-list 'lsp-language-id-configuration '(".*\\.HC$" . "holyc"))
+;; (lsp-register-client (make-lsp-client
+;;                       :new-connection (lsp-stdio-connection "hcclsp") ;; hcclsp calls hcc -lsp
+;;                       :activation-fn (lsp-activate-on "holyc")
+;;                       :server-id 'holyc))
