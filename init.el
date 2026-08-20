@@ -8,17 +8,29 @@
 
 ;;; Functions
 
-;; Copy line
 (defun copy-line()
+  "Copy line at point."
   (interactive)
   (let ((opoint (point))) ; save-excursion not work :(
 	(move-beginning-of-line 1)
 	(kill-line)
 	(yank)
 	(goto-char opoint)))
-(global-set-key (kbd "C-M-y") 'copy-line)
+(global-set-key (kbd "C-M-y") #'copy-line)
 
-;; Jump between matching symbols
+(defun funny-resize()
+  "Resize window with b, f, p and n"
+  (interactive)
+  (let ((exit nil))
+	(while (not exit)
+	  (pcase (read-char "Resize")
+		(?b (shrink-window-horizontally 5))
+		(?f (enlarge-window-horizontally 5))
+		(?p (shrink-window 5))
+		(?n (enlarge-window 5))
+		(_ (setq exit t))))))
+(global-set-key (kbd "C-c C-k") #'funny-resize)
+
 (defun hop-between-pairs(dir)
   "Jumps between matching symbols under the cursor.
 For example, can between closing and opening parentheses,
