@@ -261,7 +261,19 @@ The DWIM behaviour of this command is as follows:
 ;; ************************
 (use-package organic-green-theme
   :ensure t)
-(load-theme 'organic-green t)
+
+(let ((hour (string-to-number
+			 (car
+			  (split-string (nth 3
+								 (split-string (current-time-string) " " t))
+							":")))))
+  (if (>= hour 20)
+	  (load-theme 'leuven t)
+	(load-theme 'organic-green t)))
+
+;; ************************
+;; BACK TO PACKAGES
+;; ************************
 
 ;; Nerd font (soy but handy)
 (use-package nerd-icons
