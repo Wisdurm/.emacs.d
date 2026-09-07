@@ -251,30 +251,18 @@ The DWIM behaviour of this command is as follows:
     (unless package-archive-contents
       (package-refresh-contents))
     (package-install 'use-package)))
+
+;; ************************
+;; THEME INTERJECTION
+;; ************************
+(use-package organic-green-theme
+  :ensure t)
+(load-theme 'organic-green t)
+
 ;; Delete selected text when writing
 (use-package delsel
   :ensure nil ; no need to install it as it is built-in
   :hook (after-init . delete-selection-mode))
-;; Theme (Standard dark tinted)
-;; Not really sure what's going on here
-(use-package standard-themes
-  :ensure t
-  :init
-  ;; This makes the Modus commands listed below consider only the Ef
-  ;; themes.  For an alternative that includes Modus and all
-  ;; derivative themes (like Ef), enable the
-  ;; `modus-themes-include-derivatives-mode' instead.  The manual of
-  ;; the Ef themes has a section that explains all the possibilities:
-  ;;
-  ;; - Evaluate `(info "(standard-themes) Working with other Modus themes or taking over Modus")'
-  ;; - Visit <https://protesilaos.com/emacs/standard-themes#h:d8ebe175-cd61-4e0b-9b84-7a4f5c7e09cd>
-  (standard-themes-take-over-modus-themes-mode 1)
-  :config
-  ;; All customisations here.
-  (setq modus-themes-mixed-fonts t)
-  (setq modus-themes-italic-constructs nil)
-  ;; Finally, load your theme of choice
-  (modus-themes-load-theme 'standard-dark-tinted))
 ;; Nerd font (soy but handy)
 (use-package nerd-icons
   :ensure t)

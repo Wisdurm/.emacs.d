@@ -10,7 +10,7 @@
    '(ace-window cmake-mode company company-statistics dired-preview
 				eglot-inactive-regions exwm gh-md go-mode haskell-mode lua-mode
 				magit marginalia minimail nerd-icons-completion nerd-icons-corfu
-				nerd-icons-dired orderless standard-themes yasnippet
+				nerd-icons-dired orderless organic-green-theme yasnippet
 				yasnippet-snippets))
  '(tab-bar-mode t)
  '(tool-bar-mode nil))
