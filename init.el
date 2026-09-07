@@ -110,7 +110,6 @@ to add"
 (keymap-global-unset "C-x f")
 ;; Give specific languages the same width
 (defvaralias 'c-basic-offset 'tab-width)
-(defvaralias 'cperl-indent-level 'tab-width)
 ;; Autocomplete after tabulation
 (setq tab-always-indent 'complete)
 (add-to-list 'completion-styles 'initials t)
@@ -193,6 +192,52 @@ The DWIM behaviour of this command is as follows:
 (require 'cesp)
 
 ;; ************************
+;; POINT-UNDO
+;; ************************
+
+(defvar point-undo-ring-length 20)
+
+(defvar point-undo-ring (make-ring point-undo-ring-length))
+(make-variable-buffer-local 'point-undo-ring)
+
+(defvar point-redo-ring (make-ring point-undo-ring-length))
+(make-variable-buffer-local 'point-redo-ring)
+
+(defun point-undo-pre-command-hook ()
+  "Save positions before command."
+  (unless (or (eq this-command 'point-undo)
+              (eq this-command 'point-redo))
+    (let ((line (line-number-at-pos)))
+      (when (eq line (cdr (nth 0 (ring-elements point-undo-ring))))
+        (ring-remove point-undo-ring 0))
+      (ring-insert point-undo-ring (cons (point) line))
+      (setq point-redo-ring (make-ring point-undo-ring-length)))))
+(add-hook 'pre-command-hook 'point-undo-pre-command-hook)
+
+(defun point-undo-doit (ring1 ring2)
+  "ring1, ring2 = {point-undo-ring, point-redo-ring}"
+  (condition-case nil
+      (progn
+        (goto-char (car (nth 0 (ring-elements ring1)))) 
+        (ring-insert ring2 (ring-remove ring1 0)))
+    (error nil)))
+
+(defun point-undo ()
+  "Undo position."
+  (interactive)
+  (point-undo-doit point-undo-ring point-redo-ring))
+
+(defun point-redo ()
+  "Redo position."
+  (interactive)
+  (when (or (eq last-command 'point-undo)
+            (eq last-command 'point-redo))
+    (point-undo-doit point-redo-ring point-undo-ring)))
+
+(global-set-key (kbd "C-C C-u") #'point-undo)
+(global-set-key (kbd "C-C C-y") #'point-redo)
+
+;; ************************
 ;; PACKAGES
 ;; ************************
 
@@ -230,7 +275,7 @@ The DWIM behaviour of this command is as follows:
   (setq modus-themes-italic-constructs nil)
   ;; Finally, load your theme of choice
   (modus-themes-load-theme 'standard-dark-tinted))
-;; Nerd font
+;; Nerd font (soy but handy)
 (use-package nerd-icons
   :ensure t)
 (use-package nerd-icons-completion
@@ -251,19 +296,6 @@ The DWIM behaviour of this command is as follows:
 (use-package marginalia
   :ensure t
   :hook (after-init . marginalia-mode))
-;; Preview subdirs in dired
-(use-package dired-subtree
-  :ensure t
-  :after dired
-  :bind
-  ( :map dired-mode-map
-    ("<tab>" . dired-subtree-toggle)
-    ("TAB" . dired-subtree-toggle)
-    ("<backtab>" . dired-subtree-remove)
-    ("S-TAB" . dired-subtree-remove))
-  :config
-  (setq dired-subtree-use-backgrounds nil))
-(put 'narrow-to-region 'disabled nil)
 ;; Magit??
 (use-package magit
   :ensure t)
@@ -332,9 +364,10 @@ The DWIM behaviour of this command is as follows:
 ;; Fast movement
 (use-package avy
   :ensure t)
-;; Trying which one feels better
 (keymap-global-set "C-c j" 'avy-goto-word-1)
 (keymap-global-set "C-c m" 'avy-goto-char-2)
+(keymap-global-set "C-c n" 'avy-goto-line)
+(keymap-global-set "C-c b" 'avy-goto-char-timer)
 ;; Haskell
 (use-package haskell-mode
   :ensure t)
