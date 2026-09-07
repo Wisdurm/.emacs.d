@@ -159,24 +159,28 @@ The DWIM behaviour of this command is as follows:
 ;; Sensible defaults
 (add-to-list 'load-path "~/.emacs.d/sensible-defaults")
 (require 'sensible-defaults)
-;; Enable some
+;; Enable most
+(sensible-defaults/delete-trailing-whitespace)
+(sensible-defaults/treat-camelcase-as-separate-words)
 (sensible-defaults/automatically-follow-symlinks)
 (sensible-defaults/make-scripts-executable)
 (sensible-defaults/single-space-after-periods)
 (sensible-defaults/offer-to-create-parent-directories-on-save)
+(sensible-defaults/apply-changes-to-highlighted-region)
 (sensible-defaults/overwrite-selected-text)
+(sensible-defaults/ensure-that-files-end-with-newline)
 (sensible-defaults/make-dired-file-sizes-human-readable)
 (sensible-defaults/always-highlight-code)
+;;(sensible-defaults/refresh-buffers-when-files-change) Maybe
 (sensible-defaults/show-matching-parens)
 (sensible-defaults/flash-screen-instead-of-ringing-bell)
 (sensible-defaults/yank-to-point-on-mouse-click)
-(sensible-defaults/offer-to-create-parent-directories-on-save)
 ;; All keybindings are cool
 (sensible-defaults/use-all-keybindings)
 ;; Dont clog directories with back-up files
 (sensible-defaults/backup-to-temp-directory)
 (setq backup-by-copying t
-	  version-control t 
+	  version-control t
 	  delete-old-versions t
 	  delete-by-moving-to-trash nil
 	  kept-old-versions 2
@@ -218,7 +222,7 @@ The DWIM behaviour of this command is as follows:
   "ring1, ring2 = {point-undo-ring, point-redo-ring}"
   (condition-case nil
       (progn
-        (goto-char (car (nth 0 (ring-elements ring1)))) 
+        (goto-char (car (nth 0 (ring-elements ring1))))
         (ring-insert ring2 (ring-remove ring1 0)))
     (error nil)))
 
@@ -259,10 +263,6 @@ The DWIM behaviour of this command is as follows:
   :ensure t)
 (load-theme 'organic-green t)
 
-;; Delete selected text when writing
-(use-package delsel
-  :ensure nil ; no need to install it as it is built-in
-  :hook (after-init . delete-selection-mode))
 ;; Nerd font (soy but handy)
 (use-package nerd-icons
   :ensure t)
@@ -334,6 +334,7 @@ The DWIM behaviour of this command is as follows:
   :ensure t)
 (company-statistics-mode)
 ;; Snippets
+;; Constantly complains and not that useful but fine for now
 (use-package yasnippet
   :ensure t)
 (use-package yasnippet-snippets
