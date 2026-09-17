@@ -398,7 +398,7 @@ The DWIM behaviour of this command is as follows:
 ;;(exwm-wm-mode) rather run in .xinitrc
 (setq display-time-day-and-date t
 	  display-time-24hr-format t
-	  display-time-format "%d.%m.%Y (%A)"
+	  display-time-format "%H:%M:%S %d.%m.%Y (%A)"
 	  display-time-use-mail-icon t)
 (add-hook 'exwm-wm-mode-hook (lambda()
 							   (display-battery-mode)
