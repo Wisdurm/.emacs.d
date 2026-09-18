@@ -400,6 +400,10 @@ The DWIM behaviour of this command is as follows:
 	  display-time-24hr-format t
 	  display-time-format "%H:%M:%S %d.%m.%Y (%A)"
 	  display-time-use-mail-icon t)
+(exwm-input-set-key (kbd "s-<f12>")
+					(lambda () (interactive) (start-process "" nil "slock")))
+(exwm-input-set-key (kbd "<print>")
+					(lambda () (interactive) (start-process-shell-command "" nil "flameshot gui")))
 (add-hook 'exwm-wm-mode-hook (lambda()
 							   (display-battery-mode)
 							   (display-time)
