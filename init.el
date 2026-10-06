@@ -11,10 +11,12 @@
 (defun copy-line()
   "Copy line at point."
   (interactive)
-  (let ((opoint (point))) ; save-excursion not work :(
+  (let ((opoint (point))
+		(beg 0))
 	(move-beginning-of-line 1)
-	(kill-line)
-	(yank)
+	(setq beg (point))
+	(move-end-of-line 1)
+	(kill-ring-save beg (point))
 	(goto-char opoint)))
 (global-set-key (kbd "C-M-y") #'copy-line)
 
@@ -30,6 +32,19 @@
 		(?n (enlarge-window 5))
 		(_ (setq exit t))))))
 (global-set-key (kbd "C-c C-k") #'funny-resize)
+
+(defun exwm-funny-resize()
+  "Resize window with b, f, p and n"
+  (interactive)
+  (let ((exit nil))
+	(while (not exit)
+	  (pcase (read-char "Resize")
+		(?b (exwm-layout-shrink-window-horizontally 5))
+		(?f (exwm-layout-enlarge-window-horizontally 5))
+		(?p (exwm-layout-shrink-window 5))
+		(?n (exwm-layout-enlarge-window 5))
+		(_ (setq exit t))))))
+(global-set-key (kbd "C-c C-t C-k") #'exwm-funny-resize)
 
 (defun hop-between-pairs(dir)
   "Jumps between matching symbols under the cursor.
