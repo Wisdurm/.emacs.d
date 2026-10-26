@@ -426,3 +426,5 @@ The DWIM behaviour of this command is as follows:
 							   (start-process "" nil "brightnessctl" "set 50%")))
 ;; For cesp
 (push '("\\.jsx?\\'" . js-jsx-mode) auto-mode-alist)
+(add-hook 'js-jsx-mode-hook
+          (lambda () (local-set-key (kbd "C-c C-e") #'sgml-close-tag)))
