@@ -422,4 +422,7 @@ The DWIM behaviour of this command is as follows:
 (add-hook 'exwm-wm-mode-hook (lambda()
 							   (display-battery-mode)
 							   (display-time)
-							   (menu-bar-mode -1)))
+							   (menu-bar-mode -1)
+							   (start-process "" nil "brightnessctl" "set 50%")))
+;; For cesp
+(push '("\\.jsx?\\'" . js-jsx-mode) auto-mode-alist)
