@@ -424,6 +424,13 @@ The DWIM behaviour of this command is as follows:
 							   (display-time)
 							   (menu-bar-mode -1)
 							   (start-process "" nil "brightnessctl" "set 50%")))
+(defun trim-workspaces(keep)
+  "Trim exwm workspaces untill there are KEEP many left"
+  (interactive "nWorkspaces to keep: ")
+  (let ((i (1- (exwm-workspace--count))))
+	(while (> i (1- keep))
+	  (exwm-workspace-delete i)
+	  (setq i (1- i)))))
 ;; For cesp
 (push '("\\.jsx?\\'" . js-jsx-mode) auto-mode-alist)
 (add-hook 'js-jsx-mode-hook
